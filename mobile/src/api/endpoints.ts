@@ -34,41 +34,39 @@ export const endpoints = {
   putAnswerKey: (testId: number, entries: AnswerKeyEntry[]) =>
     api.put<{ test_id: number; count: number }>(`/tests/${testId}/answer-key`, { entries }),
 
-  /** Upload one sheet. `uri` is a local file URI from the camera or picker. */
-  /** Upload one sheet. `uri` is a local file URI from the camera or picker.
-   *
-   *  The two platforms need different FormData payloads and there is no
-   *  shape that works on both: React Native's FormData takes a
-   *  {uri, name, type} descriptor and streams the file itself, while on web
-   *  that object serialises to the string "[object Object]" and the server
-   *  rejects it ("Expected UploadFile, received: str"). Web therefore has to
-   *  fetch the URI into a real Blob first.
-   */
+  /** Upload one sheet. `file.uri` is a local file URI from the camera or picker. */
   scan: async (
     testId: number,
     file: { uri: string; name: string; type: string },
   ) => {
+    if (!file.uri) {
+      throw new Error('The prepared image has no file path to upload.');
+    }
     const form = new FormData();
 
+    // Expo SDK 53+ installs its own `fetch` ("Winter"), which this app's
+    // client.ts calls on every platform -- it replaces React Native's
+    // fetch/XHR globally, there is no opting out per-call. Winter's own
+    // multipart encoder (expo/src/winter/fetch/convertFormData.ts) only
+    // accepts a FormData part that is a `string` or a `Blob`; React Native's
+    // native upload shape, `{uri, name, type}`, is not one of those and its
+    // own test suite documents the result: a thrown
+    // "Unsupported FormDataPart implementation" for exactly that shape. So a
+    // real Blob is required on every platform now, not only on web -- fetch
+    // reads the local file into one here via expo-file-system's `File`,
+    // which implements the `Blob` interface Winter checks for.
+    let blob: Blob;
     if (Platform.OS === 'web') {
-      const blob = await (await fetch(file.uri)).blob();
-      form.append('file', new File([blob], file.name, {
-        type: blob.type || file.type,
-      }));
+      blob = await (await fetch(file.uri)).blob();
     } else {
-      if (!file.uri) {
-        throw new Error('The prepared image has no file path to upload.');
-      }
-      // A fresh plain object with exactly the three keys React Native's
-      // FormData understands. Passing the prepared object through directly
-      // risks handing the native encoder something it cannot read, which it
-      // reports only as "Unsupported FormData part implementation".
-      form.append('file', {
-        uri: String(file.uri),
-        name: String(file.name || 'sheet.jpg'),
-        type: String(file.type || 'image/jpeg'),
-      } as unknown as Blob);
+      // expo-file-system's web build is a stub that only warns ("not
+      // supported on web"), so the import is deferred to the native branch
+      // rather than done unconditionally at the top of the function.
+      const { File } = await import('expo-file-system');
+      blob = new File(file.uri);
     }
+    form.append('file', blob, file.name || 'sheet.jpg');
+
     return api.upload<ScanResponse>(`/tests/${testId}/scan`, form);
   },
 
