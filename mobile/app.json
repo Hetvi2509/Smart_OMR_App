@@ -25,19 +25,27 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.smartomrevaluator.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "apiUrl": null
-    }
+      "apiUrl": "https://smart-omr-app.onrender.com",
+      "eas": {
+        "projectId": "a352fe6b-81e7-4974-aebf-49ac450088d1"
+      }
+    },
+    "owner": "henit_panchal"
   }
 }

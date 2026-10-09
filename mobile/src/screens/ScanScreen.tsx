@@ -102,11 +102,12 @@ export default function ScanScreen({ route, navigation }: any) {
     // vague message, which made it impossible to tell a resize crash from a
     // refused upload from a server error.
     let stage = 'preparing the image';
+    let prepared: Awaited<ReturnType<typeof prepareSheetForUpload>> | null = null;
     try {
       // Downscale before upload: a raw phone photo is several megabytes, and
       // the engine discards everything above 1600px wide anyway. Returns the
       // name and type that match the bytes actually produced.
-      const prepared = await prepareSheetForUpload(image.uri, image.name);
+      prepared = await prepareSheetForUpload(image.uri, image.name);
 
       stage = 'contacting the server';
       // Confirms the address is reachable before the long upload, so a wrong
@@ -134,11 +135,17 @@ export default function ScanScreen({ route, navigation }: any) {
       });
     } catch (err) {
       const e = err as { message?: string; status?: number };
-      // Naming the stage turns "it failed" into something actionable, and the
-      // raw message is kept rather than replaced with a guess at the cause.
+      // The prepared file's own shape is folded into the message during this
+      // investigation: a native-only upload failure with no further detail
+      // gives no way to tell a bad URI from a missing content-type from
+      // something else, and that shape is exactly what decides which.
+      const shape = prepared
+        ? ` [uri=${prepared.uri.slice(0, 60)}${prepared.uri.length > 60 ? '…' : ''}, name=${prepared.name}, type=${prepared.type}]`
+        : ' [prepared image unavailable]';
       setFailure(
         `Failed while ${stage}: ${e?.message || String(err)}` +
-          (e?.status ? ` (HTTP ${e.status})` : ''),
+          (e?.status ? ` (HTTP ${e.status})` : '') +
+          (stage === 'uploading the sheet' ? shape : ''),
       );
     } finally {
       setUploading(false);
