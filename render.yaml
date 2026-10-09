@@ -1,0 +1,28 @@
+# Render deployment blueprint for the Smart OMR Evaluator API.
+#
+# Render reads this automatically when you create a new service from this
+# repo ("New +" -> "Blueprint" in the Render dashboard), so the free-tier
+# plan, the Dockerfile path and every env var below are set for you instead
+# of being clicked through by hand.
+#
+# DATABASE_URL and JWT_SECRET are marked sync: false -- Render will prompt
+# for them once in the dashboard rather than storing secrets in this file,
+# which is committed to the repo.
+
+services:
+  - type: web
+    name: smart-omr-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: STORAGE_BACKEND
+        value: db
+      - key: ENABLE_OCR
+        value: "0"
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false

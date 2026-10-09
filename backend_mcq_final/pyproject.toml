@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "omr-mcq"
+version = "1.0.0"
+description = "Structure-driven OMR bubble reading: lattice localisation plus ink classification, no circle detection"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "opencv-python-headless>=4.9,<5",
+    "numpy>=1.26,<3",
+]
+
+[project.scripts]
+omr-mcq = "omr_mcq.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools]
+packages = ["omr_mcq"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

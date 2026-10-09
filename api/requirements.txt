@@ -1,0 +1,14 @@
+fastapi>=0.115,<0.200
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+pydantic>=2.7,<3
+psycopg[binary,pool]>=3.1,<4
+bcrypt>=4.1
+PyJWT>=2.8
+reportlab>=4.0,<5
+# OMR engine (backend_mcq_final) deps
+opencv-python-headless>=4.9
+numpy>=1.26
+# OCR: lazy-imported, see app/ocr.py. Install separately if not needed:
+#   pip install paddleocr paddlepaddle
+email-validator>=2.0

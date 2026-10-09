@@ -1,0 +1,41 @@
+# Superseded by backend_mcq_final/ (OMR engine) + api/ (FastAPI service).
+# Kept on disk locally for reference only; not part of the deployed app.
+backend/
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Secrets — never committed. Copy api/.env.example to api/.env locally.
+.env
+.env.*
+!.env.example
+
+# Node / Expo
+node_modules/
+.expo/
+dist/
+web-build/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Runtime data this repo should not ship with
+**/storage/
+*.db
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Local tool configuration, not application code
+.claude/
+
+# Stray local file, not part of the app
+omr_kp_NEW_page-0001 (2).pdf (3).pdf
