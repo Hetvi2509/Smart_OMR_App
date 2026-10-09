@@ -6,6 +6,7 @@ import { useAuth } from '../store/auth';
 import { spacing } from '../theme';
 import { useTheme } from '../theme/ThemeProvider';
 import { Button, Card, Field, Notice, Txt, useToast } from '../ui';
+import AppLogo from '../ui/AppLogo';
 
 export default function SignUpScreen({ navigation }: any) {
   const { colors } = useTheme();
@@ -62,6 +63,9 @@ export default function SignUpScreen({ navigation }: any) {
         }}
         keyboardShouldPersistTaps="handled"
       >
+        <View style={{ marginBottom: spacing.lg }}>
+          <AppLogo size={52} />
+        </View>
         <Txt variant="display" weight="bold" style={{ marginBottom: 4 }}>
           Create account
         </Txt>

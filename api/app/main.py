@@ -56,6 +56,7 @@ def health() -> dict:
             "database": database,
             "ocr_enabled": config.ENABLE_OCR,
             "ocr_available": ocr.available(),
+            "storage_backend": config.STORAGE_BACKEND,
             "version": app.version}
 
 

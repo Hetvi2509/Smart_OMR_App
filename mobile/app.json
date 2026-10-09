@@ -19,7 +19,16 @@
           "photosPermission": "Allow Smart OMR Evaluator to access your photos to upload an answer sheet."
         }
       ],
-      "expo-sharing"
+      "expo-sharing",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 220,
+          "resizeMode": "contain",
+          "backgroundColor": "#FFFFFF"
+        }
+      ]
     ],
     "ios": {
       "supportsTablet": true

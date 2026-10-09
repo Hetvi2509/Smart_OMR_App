@@ -7,9 +7,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { endpoints } from '../api/endpoints';
 import { getBaseUrl } from '../api/client';
 import { useAuth } from '../store/auth';
-import { radius, spacing } from '../theme';
+import { spacing } from '../theme';
 import { useTheme } from '../theme/ThemeProvider';
 import { Button, Card, Field, Notice, Txt, useToast } from '../ui';
+import AppLogo from '../ui/AppLogo';
 
 export default function LoginScreen({ navigation }: any) {
   const { colors } = useTheme();
@@ -65,17 +66,8 @@ export default function LoginScreen({ navigation }: any) {
         keyboardShouldPersistTaps="handled"
       >
         <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
-          <View
-            style={{
-              width: 66, height: 66, borderRadius: radius.lg,
-              backgroundColor: colors.primary, alignItems: 'center',
-              justifyContent: 'center', borderWidth: 1.5,
-              borderColor: colors.border, marginBottom: spacing.md,
-            }}
-          >
-            <Txt variant="title" weight="bold" color={colors.primaryForeground}>
-              ◉
-            </Txt>
+          <View style={{ marginBottom: spacing.md }}>
+            <AppLogo size={72} />
           </View>
           <Txt variant="display" weight="bold" center>Smart OMR</Txt>
           <Txt variant="small" muted center style={{ marginTop: 4 }}>
